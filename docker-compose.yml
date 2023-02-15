@@ -1,0 +1,15 @@
+version: '3'
+services:
+    api:
+        build: .
+        container_name: "pets"
+        ports:
+            - "8080:8080"
+        environment: 
+            - APPLICATION_PORT=:8080
+            - DB_HOST=postgresql
+            - DB_PORT=5432
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DBNAME=postgres
+            - SCHEMA=public

@@ -1,0 +1,344 @@
+openapi: 3.0.0
+tags:
+  - name: Pets
+    description: Operations to manage pets
+servers:
+  - url: 'http://localhost:8080'
+    description: 'local'
+info:
+  description: pets api
+  version: 1.0.0
+  title: pets api
+  contact:
+    email: me@yo.com
+paths:
+  /pets:
+    get:
+      summary: Search pets that match the given filters
+      description: 'Search pets that match the given filters, if there is not any return the first 10 pets'
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+            example:
+              - drila
+        - in: query
+          name: page
+          description: page we want from the result.
+          schema:
+            type: integer
+            example:
+              - 1
+        - in: query
+          name: pagesize
+          description: how many rows per page.
+          schema:
+            type: integer
+            example:
+              - 1
+        - in: query
+          name: orderby
+          description: name of the field we want to order by.
+          schema:
+            type: string
+            example:
+              - name
+      tags:
+        - Pets
+      operationId: '1'
+      responses:
+        '200':
+          description: list of pets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchPetsResult'
+                example:
+                  - {
+                      "success": true,
+                      "data": {
+                        "pets": [
+                          {
+                            "id": "56016eaf-5e15-44db-839c-ef4f7f9df437",
+                            "name": "Drila"
+                          },
+                          {
+                            "id": "ec665f5e-da4e-4f51-bc4c-310dd7cc9590",
+                            "name": "Michael"
+                          }
+                        ],
+                        "total": 2,
+                        "page": 1,
+                        "page_size": 10
+                      },
+                      "errors": null
+                    }
+        '500':
+          description: empty list of pets and a list of errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchPetsResult'
+                example:
+                  - {
+                      "success": false,
+                      "data": {
+                        "pets": [],
+                        "total": 0,
+                        "page": 1,
+                        "page_size": 10
+                      },
+                      "errors": [
+                        "database was not available"
+                      ]
+                    }
+    post:
+      summary: Add a new pet to pets
+      description: 'add a new pet'
+      parameters: []
+      tags:
+        - Pets
+      operationId: '2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPet'
+      responses:
+        '200':
+          description: pet was added to pets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePetResult'
+                example:
+                  - {
+                      "success": true,
+                      "data": "cb24865f-59f8-48cb-a039-a0e6ee915606",
+                      "errors": null
+                    }
+        '500':
+          description: unable to add pet to the store.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePetResult'
+                example:
+                  - {
+                      "success": false,
+                      "data": "cb24865f-59f8-48cb-a039-a0e6ee915606",
+                      "errors": [
+                        "database was not available"
+                      ]
+                    }
+    put:
+      summary: Update a new pet to pets
+      description: 'add a new pet'
+      parameters: []
+      tags:
+        - Pets
+      operationId: '3'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '200':
+          description: pet was updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePetResult'
+                example:
+                  - {
+                      "success": true,
+                      "data": null,
+                      "errors": null
+                    }
+        '500':
+          description: pet was not updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePetResult'
+                example:
+                  - {
+                      "success": false,
+                      "data": null,
+                      "errors": [
+                        "database was not available"
+                      ]
+                    }
+  '/pets/{id}':
+    get:
+      summary: Get a pet
+      description: 'Get a pet'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Pet ID UUID format.
+      tags:
+        - Pets
+      operationId: '4'
+      responses:
+        '200':
+          description: get a pet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPetResult'
+                example:
+                  - {
+                      "success": true,
+                      "data": {
+                        "id": "56016eaf-5e15-44db-839c-ef4f7f9df437",
+                        "name": "Drila"
+                      },
+                      "errors": null
+                    }
+                  - {
+                      "success": true,
+                      "data": null,
+                      "errors": null
+                    }
+        '500':
+          description: unable to get a pet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPetResult'
+                example:
+                  - {
+                      "success": false,
+                      "data": null,
+                      "errors": [
+                        "database was not available"
+                      ]
+                    }
+    delete:
+      summary: delete a pet
+      description: 'Delete a pet'
+      parameters: []
+      tags:
+        - Pets
+      operationId: '5'
+      responses:
+        '200':
+          description: pet was deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePetResult'
+                example:
+                  - {
+                      "success": true,
+                      "data": null,
+                      "errors": null
+                    }
+        '500':
+          description: pet was not deleted due to errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePetResult'
+                example:
+                  - {
+                      "success": false,
+                      "data": null,
+                      "errors": [
+                        "database was not available"
+                      ]
+                    }
+components:
+  schemas:
+    CreatePetResult:
+      type: object
+      properties:
+        success:
+          $ref: "#/components/schemas/Success"
+        data:
+          type: string
+          description: "pet id"
+          example:
+            - "98b17b06-c19f-4105-b451-99972bbc8813"
+        errors:
+          $ref: "#/components/schemas/Errors"
+    UpdatePetResult:
+      type: object
+      properties:
+        success:
+          $ref: "#/components/schemas/Success"
+        errors:
+          $ref: "#/components/schemas/Errors"
+    DeletePetResult:
+      type: object
+      properties:
+        success:
+          $ref: "#/components/schemas/Success"
+        errors:
+          $ref: "#/components/schemas/Errors"
+    GetPetResult:
+      type: object
+      properties:
+        success:
+          $ref: "#/components/schemas/Success"
+        data:
+          $ref: "#/components/schemas/Pet"
+        errors:
+          $ref: "#/components/schemas/Errors"
+    SearchPetsResult:
+      type: object
+      properties:
+        success:
+          $ref: "#/components/schemas/Success"
+        data:
+          type: object
+          properties:
+            pets:
+              $ref: "#/components/schemas/Pets"
+            total:
+              type: integer
+              description: total number of records that match the filters.
+            page:
+              type: integer
+              description: current page of the list of pets.
+            page_size:
+              type: integer
+              description: number of records per page.
+        errors:
+          $ref: "#/components/schemas/Errors"
+    Pets:
+      type: array
+      items: {
+        $ref: "#/components/schemas/Pet"
+      }
+    NewPet:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "drila"
+    Pet:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'ab856d8b-012a-450a-b2f4-f0ab7554741b'
+        name:
+          type: string
+          example: "Lui"
+    Success:
+      type: boolean
+      description: "it says if the operation was successful or not"
+      example:
+            - true
+            - false
+    Errors:
+      type: array
+      items:
+        type: string
