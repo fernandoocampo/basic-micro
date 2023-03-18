@@ -126,7 +126,7 @@ func (s *Service) Delete(ctx context.Context, id PetID) error {
 			zap.String("id", fmt.Sprintf("%+v", id)),
 			zap.Error(err))
 
-		return errUpdatePet
+		return errDeletePet
 	}
 
 	return nil

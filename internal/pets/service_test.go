@@ -142,7 +142,7 @@ func TestDelete(t *testing.T) {
 	}
 
 	storerMock := newStorerMock(
-		withFoundPet(foundPet),
+		withFoundPet(&foundPet),
 	)
 
 	settings := pets.ServiceSetup{
@@ -159,13 +159,136 @@ func TestDelete(t *testing.T) {
 
 	// Then
 	assert.NoError(t, err)
-	assert.Equal(t, foundPet, storerMock.foundPet)
+	assert.Equal(t, foundPet, *storerMock.foundPet)
 }
 
-func TestQuery(t *testing.T) {
+func TestDeleteButPetNotFound(t *testing.T) {
+	t.Parallel()
+
+	// Given
+	petID := pets.PetID("858455b7-e182-4122-a1b6-132c64d2f77b")
+
+	storerMock := newStorerMock()
+
+	settings := pets.ServiceSetup{
+		Storer: storerMock,
+		Logger: newLogger(),
+	}
+
+	service := pets.NewService(settings)
+
+	ctx := context.TODO()
+
+	// When
+	err := service.Delete(ctx, petID)
+
+	// Then
+	assert.NoError(t, err)
+}
+
+func TestDeleteButError(t *testing.T) {
+	t.Parallel()
+
+	// Given
+	petID := pets.PetID("858455b7-e182-4122-a1b6-132c64d2f77b")
+
+	expectedError := errors.New("unable to delete pet")
+
+	foundPet := pets.Pet{
+		ID:   pets.PetID("858455b7-e182-4122-a1b6-132c64d2f77b"),
+		Name: "drila",
+	}
+
+	storerMock := newStorerMock(
+		withFoundPet(&foundPet),
+		withError(errors.New("any error")),
+	)
+
+	settings := pets.ServiceSetup{
+		Storer: storerMock,
+		Logger: newLogger(),
+	}
+
+	service := pets.NewService(settings)
+
+	ctx := context.TODO()
+
+	// When
+	err := service.Delete(ctx, petID)
+
+	// Then
+	assert.Error(t, err)
+	assert.Equal(t, expectedError, err)
 }
 
 func TestQueryByID(t *testing.T) {
+	t.Parallel()
+
+	// Given
+	petID := pets.PetID("858455b7-e182-4122-a1b6-132c64d2f77b")
+
+	foundPet := pets.Pet{
+		ID:   pets.PetID("858455b7-e182-4122-a1b6-132c64d2f77b"),
+		Name: "drila",
+	}
+
+	expectedPet := pets.Pet{
+		ID:   pets.PetID("858455b7-e182-4122-a1b6-132c64d2f77b"),
+		Name: "drila",
+	}
+
+	storerMock := newStorerMock(
+		withFoundPet(&foundPet),
+	)
+
+	settings := pets.ServiceSetup{
+		Storer: storerMock,
+		Logger: newLogger(),
+	}
+
+	service := pets.NewService(settings)
+
+	ctx := context.TODO()
+
+	// When
+	got, err := service.QueryByID(ctx, petID)
+
+	// Then
+	assert.NoError(t, err)
+	assert.Equal(t, expectedPet, *got)
+}
+
+func TestQueryByIDButError(t *testing.T) {
+	t.Parallel()
+
+	// Given
+	petID := pets.PetID("858455b7-e182-4122-a1b6-132c64d2f77b")
+
+	expectedError := errors.New("unable to query pet")
+
+	storerMock := newStorerMock(
+		withError(errors.New("any internal error")),
+	)
+
+	settings := pets.ServiceSetup{
+		Storer: storerMock,
+		Logger: newLogger(),
+	}
+
+	service := pets.NewService(settings)
+
+	ctx := context.TODO()
+
+	// When
+	got, err := service.QueryByID(ctx, petID)
+
+	// Then
+	assert.Error(t, err)
+	assert.Nil(t, got)
+	assert.Equal(t, expectedError, err)
+}
+
+func TestQuery(t *testing.T) {
 }
 
 type storerMock struct {
@@ -176,7 +299,7 @@ type storerMock struct {
 
 	updatedPet pets.UpdatePet
 	deletedPet pets.Pet
-	foundPet   pets.Pet
+	foundPet   *pets.Pet
 }
 
 func newStorerMock(options ...func(*storerMock)) *storerMock {
@@ -197,7 +320,7 @@ func withError(err error) func(*storerMock) {
 	}
 }
 
-func withFoundPet(pet pets.Pet) func(*storerMock) {
+func withFoundPet(pet *pets.Pet) func(*storerMock) {
 	return func(s *storerMock) {
 		s.foundPet = pet
 	}
@@ -238,7 +361,7 @@ func (s *storerMock) QueryByID(ctx context.Context, id pets.PetID) (*pets.Pet, e
 		return nil, s.err
 	}
 
-	return &s.foundPet, nil
+	return s.foundPet, nil
 }
 
 func newLogger() *zap.Logger {
