@@ -3,6 +3,7 @@ package web_test
 import (
 	"bytes"
 	"context"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"testing"
@@ -11,7 +12,6 @@ import (
 	"github.com/fernandoocampo/basic-micro/internal/pets"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/zap"
 )
 
 func TestGetPetWithIDDecoder(t *testing.T) {
@@ -146,6 +146,6 @@ func createHTTPRequest(t *testing.T, body []byte, httpMethod, url string) *http.
 	return newHTTPRequest
 }
 
-func newDummyLogger() *zap.Logger {
-	return zap.NewExample()
+func newDummyLogger() *slog.Logger {
+	return slog.Default()
 }

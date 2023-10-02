@@ -2,18 +2,18 @@ package stores
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/fernandoocampo/basic-micro/internal/pets"
-	"go.uber.org/zap"
 )
 
 type Setup struct {
-	Logger *zap.Logger
+	Logger *slog.Logger
 }
 
 // Store handles logic to persist data from this microservice.
 type Store struct {
-	logger *zap.Logger
+	logger *slog.Logger
 }
 
 func NewStore(setup Setup) *Store {

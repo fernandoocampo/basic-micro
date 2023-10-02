@@ -3,10 +3,10 @@ package web
 import (
 	"context"
 	"encoding/json"
+	"log/slog"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"go.uber.org/zap"
 )
 
 // Endpoint defines endpoint logic
@@ -34,7 +34,7 @@ type Handler struct {
 	endpoint Endpoint
 	decoder  Decoder
 	encoder  Encoder
-	logger   *zap.Logger
+	logger   *slog.Logger
 }
 
 // ErrorResponse define response.
@@ -109,7 +109,7 @@ func (h *Handler) encodeError(err error, w http.ResponseWriter) {
 
 	content, errMarshal := json.Marshal(newErrorMessage)
 	if errMarshal != nil {
-		h.logger.Error("unable to marshal error response into json", zap.Error(errMarshal))
+		h.logger.Error("unable to marshal error response into json", "error", errMarshal)
 
 		content = defaultErrorResponse
 	}

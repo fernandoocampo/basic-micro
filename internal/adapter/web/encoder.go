@@ -6,30 +6,30 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/fernandoocampo/basic-micro/internal/pets"
-	"go.uber.org/zap"
 )
 
 type GetPetWithIDEncoder struct {
-	logger *zap.Logger
+	logger *slog.Logger
 }
 
 type SearchPetsEncoder struct {
-	logger *zap.Logger
+	logger *slog.Logger
 }
 
 type CreatePetEncoder struct {
-	logger *zap.Logger
+	logger *slog.Logger
 }
 
 type UpdatePetEncoder struct {
-	logger *zap.Logger
+	logger *slog.Logger
 }
 
 type DeletePetEncoder struct {
-	logger *zap.Logger
+	logger *slog.Logger
 }
 
 type PetEncoders struct {
@@ -44,7 +44,7 @@ var (
 	errUnableToEncodeResult = errors.New("unable to encode the result")
 )
 
-func NewPetEncoders(logger *zap.Logger) PetEncoders {
+func NewPetEncoders(logger *slog.Logger) PetEncoders {
 	newEncoders := PetEncoders{
 		GetByIDEncoder: NewGetPetWithIDEncoder(logger),
 		SearchEncoder:  NewSearchPetsEncoder(logger),
@@ -56,7 +56,7 @@ func NewPetEncoders(logger *zap.Logger) PetEncoders {
 	return newEncoders
 }
 
-func NewGetPetWithIDEncoder(logger *zap.Logger) *GetPetWithIDEncoder {
+func NewGetPetWithIDEncoder(logger *slog.Logger) *GetPetWithIDEncoder {
 	newEncoder := GetPetWithIDEncoder{
 		logger: logger,
 	}
@@ -64,7 +64,7 @@ func NewGetPetWithIDEncoder(logger *zap.Logger) *GetPetWithIDEncoder {
 	return &newEncoder
 }
 
-func NewSearchPetsEncoder(logger *zap.Logger) *SearchPetsEncoder {
+func NewSearchPetsEncoder(logger *slog.Logger) *SearchPetsEncoder {
 	newEncoder := SearchPetsEncoder{
 		logger: logger,
 	}
@@ -72,7 +72,7 @@ func NewSearchPetsEncoder(logger *zap.Logger) *SearchPetsEncoder {
 	return &newEncoder
 }
 
-func NewCreatePetEncoder(logger *zap.Logger) *CreatePetEncoder {
+func NewCreatePetEncoder(logger *slog.Logger) *CreatePetEncoder {
 	newEncoder := CreatePetEncoder{
 		logger: logger,
 	}
@@ -80,7 +80,7 @@ func NewCreatePetEncoder(logger *zap.Logger) *CreatePetEncoder {
 	return &newEncoder
 }
 
-func NewUpdatePetEncoder(logger *zap.Logger) *UpdatePetEncoder {
+func NewUpdatePetEncoder(logger *slog.Logger) *UpdatePetEncoder {
 	newEncoder := UpdatePetEncoder{
 		logger: logger,
 	}
@@ -88,7 +88,7 @@ func NewUpdatePetEncoder(logger *zap.Logger) *UpdatePetEncoder {
 	return &newEncoder
 }
 
-func NewDeletePetEncoder(logger *zap.Logger) *DeletePetEncoder {
+func NewDeletePetEncoder(logger *slog.Logger) *DeletePetEncoder {
 	newEncoder := DeletePetEncoder{
 		logger: logger,
 	}

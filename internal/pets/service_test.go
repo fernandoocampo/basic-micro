@@ -3,11 +3,11 @@ package pets_test
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"testing"
 
 	"github.com/fernandoocampo/basic-micro/internal/pets"
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/zap"
 )
 
 func TestCreate(t *testing.T) {
@@ -364,6 +364,6 @@ func (s *storerMock) QueryByID(ctx context.Context, id pets.PetID) (*pets.Pet, e
 	return s.foundPet, nil
 }
 
-func newLogger() *zap.Logger {
-	return zap.NewExample()
+func newLogger() *slog.Logger {
+	return slog.Default()
 }

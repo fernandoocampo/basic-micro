@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,7 +14,6 @@ import (
 	"github.com/fernandoocampo/basic-micro/internal/adapter/web"
 	"github.com/fernandoocampo/basic-micro/internal/pets"
 	"github.com/fernandoocampo/basic-micro/internal/setups"
-	"go.uber.org/zap"
 )
 
 // Event contains an application event.
@@ -31,7 +31,7 @@ type Setup struct {
 
 // Server is the server of our application.
 type Server struct {
-	logger     *zap.Logger
+	logger     *slog.Logger
 	store      *stores.Store
 	setup      setups.Application
 	version    string
@@ -66,7 +66,7 @@ func (s *Server) Run() error {
 		return errStartingApplication
 	}
 
-	s.logger.Debug("application configuration", zap.String("parameters", fmt.Sprintf("%+v", s.setup)))
+	s.logger.Debug("application configuration", slog.String("parameters", fmt.Sprintf("%+v", s.setup)))
 
 	s.logger.Info("starting database connection")
 
@@ -87,10 +87,10 @@ func (s *Server) Run() error {
 	s.startWebServer(petEndpoints, eventStream)
 
 	eventMessage := <-eventStream
-	s.logger.Info("ending server", zap.String("event", eventMessage.Message))
+	s.logger.Info("ending server", slog.String("event", eventMessage.Message))
 
 	if eventMessage.Error != nil {
-		s.logger.Error("ending server with error", zap.Error(eventMessage.Error))
+		s.logger.Error("ending server with error", "error", eventMessage.Error)
 
 		return errStartingApplication
 	}
@@ -99,24 +99,22 @@ func (s *Server) Run() error {
 }
 
 func (s *Server) initializeLogger() error {
-	var logger *zap.Logger
-	var err error
+	logLevel := slog.LevelDebug
 
 	if s.setup.LogLevel == setups.ProductionLog {
-		logger, err = zap.NewProduction()
-	} else {
-		logger, err = zap.NewDevelopment()
+		logLevel = slog.LevelInfo
 	}
 
-	if err != nil {
-		fmt.Println(
-			"level", "ERROR",
-			"msg", "unable to initialize logger",
-			"error", err,
-		)
-
-		return fmt.Errorf("unable to initialize logger: %w", err)
+	handlerOptions := &slog.HandlerOptions{
+		Level: logLevel,
 	}
+
+	loggerHandler := slog.NewJSONHandler(os.Stdout, handlerOptions)
+	logger := slog.New(loggerHandler)
+
+	logger.Info(fmt.Sprintf("using %q log level", handlerOptions.Level.Level().String()))
+
+	slog.SetDefault(logger)
 
 	s.logger = logger
 
@@ -152,7 +150,7 @@ func (s *Server) listenToOSSignal(eventStream chan<- Event) {
 // startWebServer starts the web server.
 func (s *Server) startWebServer(petEndpoints pets.Endpoints, eventStream chan<- Event) {
 	go func() {
-		s.logger.Info("starting http server", zap.String("port", s.setup.ApplicationPort))
+		s.logger.Info("starting http server", slog.String("port", s.setup.ApplicationPort))
 		router := petsRouter{
 			router:    web.NewRouter(),
 			endpoints: petEndpoints,

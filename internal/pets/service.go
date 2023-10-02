@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"go.uber.org/zap"
+	"log/slog"
 )
 
 // Storer defines persistence behavior
@@ -22,13 +22,13 @@ type Storer interface {
 // ServiceSetup contains service metadata.
 type ServiceSetup struct {
 	Storer Storer
-	Logger *zap.Logger
+	Logger *slog.Logger
 }
 
 // Service implements pets business logic.
 type Service struct {
 	storer Storer
-	logger *zap.Logger
+	logger *slog.Logger
 }
 
 var (
@@ -56,14 +56,14 @@ func (s *Service) Create(ctx context.Context, newPet NewPet) (PetID, error) {
 
 	err := s.storer.Save(ctx, pet)
 	if err != nil {
-		s.logger.Error("unable to create pet", zap.Error(err))
+		s.logger.Error("creating pet", "error", err)
 
 		return EmptyPetID, errSavePet
 	}
 
 	s.logger.Debug(
 		"pet was created",
-		zap.String("id", pet.ID.String()),
+		slog.String("id", pet.ID.String()),
 	)
 
 	return pet.ID, nil
@@ -78,7 +78,7 @@ func (s *Service) Update(ctx context.Context, pet UpdatePet) error {
 
 	err = s.storer.Update(ctx, pet)
 	if err != nil {
-		s.logger.Error("unable to update pet", zap.Error(err))
+		s.logger.Error("updating pet", "error", err)
 
 		return errUpdatePet
 	}
@@ -94,9 +94,9 @@ func (s *Service) QueryByID(ctx context.Context, id PetID) (*Pet, error) {
 	pet, err := s.storer.QueryByID(ctx, id)
 	if err != nil {
 		s.logger.Error(
-			"unable to query pet by id",
-			zap.String("id", fmt.Sprintf("%+v", id)),
-			zap.Error(err))
+			"querying pet with id",
+			"error", err,
+			slog.String("id", id.String()))
 
 		return nil, errQueryPet
 	}
@@ -114,7 +114,7 @@ func (s *Service) Delete(ctx context.Context, id PetID) error {
 	if pet == nil {
 		s.logger.Info(
 			"unable to delete pet cause it does not exist",
-			zap.String("id", fmt.Sprintf("%+v", id)),
+			slog.String("id", fmt.Sprintf("%+v", id)),
 		)
 
 		return nil
@@ -122,9 +122,9 @@ func (s *Service) Delete(ctx context.Context, id PetID) error {
 
 	err = s.storer.Delete(ctx, *pet)
 	if err != nil {
-		s.logger.Error("unable to delete pet",
-			zap.String("id", fmt.Sprintf("%+v", id)),
-			zap.Error(err))
+		s.logger.Error("deleting pet",
+			"error", err,
+			slog.String("id", id.String()))
 
 		return errDeletePet
 	}
@@ -142,11 +142,11 @@ func (s *Service) Query(ctx context.Context, filter QueryFilter) (SearchPetsResu
 	result, err := s.storer.Query(ctx, filter)
 	if err != nil {
 		s.logger.Error(
-			"unable to query pets by filter",
-			zap.String("filter", fmt.Sprintf("%+v", filter)),
-			zap.Error(err))
+			"querying pets by filter",
+			"error", err,
+			slog.String("filter", fmt.Sprintf("%+v", filter)))
 
-		return SearchPetsResult{}, errQueryPet
+		return SearchPetsResult{}, errQueryPets
 	}
 
 	return result, nil
