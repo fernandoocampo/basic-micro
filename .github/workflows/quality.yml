@@ -12,6 +12,11 @@ jobs:
 
     - name: Conventional Commit Linter
       uses: ahmadnassri/action-commit-lint@v2
+    
+    - name: Dockerfile Linter
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: ./Dockerfile
 
     - name: Setup go
       uses: actions/setup-go@v4
@@ -27,6 +32,12 @@ jobs:
         key: ${{ runner.os }}-basic-micro-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-basic-micro-
+    
+    - name: Scan for Vulnerabilities in Code
+      uses: Templum/govulncheck-action@v1.0.0
+      with:
+        go-version: '1.21'
+        skip-upload: true
 
     - name: Go Test
       run: make test
