@@ -58,6 +58,7 @@ func NewServer(settings Setup) *Server {
 }
 
 func (s *Server) Run() error {
+	slog.Info("starting application")
 	ctx, stop := s.initializeApplication()
 	defer stop()
 
