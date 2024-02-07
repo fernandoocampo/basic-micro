@@ -25,6 +25,9 @@ build-linux: ## Build binary for Linux
 	@mkdir -p bin
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 ${GOBUILD} -ldflags ${LDFLAGS} -o bin/${BINARY_UNIX} ./${SRC_FOLDER}/main.go
 
+.PHONY: run-app
+run-app: ## run app
+	go run cmd/petsd/main.go
 
 .PHONY: run-local
 run-local: ## run project local
