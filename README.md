@@ -43,6 +43,12 @@ from project folder run the following command
 make test
 ```
 
+or 
+
+```sh
+go test -race ./...
+```
+
 ## Adding open telemetry
 
 you can follow these [instructions](https://opentelemetry.io/docs/instrumentation/go/getting-started/)
