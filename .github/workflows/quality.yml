@@ -3,6 +3,11 @@ name: quality
 on:
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - 'docker-compose.yml'
+      - 'docs/**'
 
 jobs:
   quality:
