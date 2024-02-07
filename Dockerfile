@@ -1,5 +1,5 @@
 # Builder image go
-FROM golang:1.21.0 AS builder
+FROM golang:1.21.7 AS builder
 
 ARG appVersion
 ARG commitHash
@@ -13,11 +13,10 @@ ENV GOPATH /opt/go
 RUN mkdir -p /pets
 WORKDIR /pets
 COPY . /pets
-RUN go mod tidy
-RUN make build-linux
+RUN go mod tidy && make build-linux
 
 # Runnable image
-FROM alpine
+FROM alpine:3.19
 ARG appVersion
 ARG commitHash
 ENV VERSION=$appVersion

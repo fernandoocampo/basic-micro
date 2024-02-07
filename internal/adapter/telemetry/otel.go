@@ -17,6 +17,7 @@ import (
 
 type ShutdownFunc func(context.Context)
 
+// OtelSDKSetup contains data needed by telemetry implementation.
 type OtelSDKSetup struct {
 	ServiceName    string
 	ServiceVersion string
