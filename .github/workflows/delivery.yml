@@ -11,8 +11,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
       with:
-        fetch-depth: 1
-        fetch-tags: true
+        fetch-tags: 'true'
 
     - name: Print head git commit message
       run: |
