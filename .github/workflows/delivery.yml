@@ -27,7 +27,7 @@ jobs:
 
     - name: print tags
       run: |
-        echo "$(git tag)"
+        echo "$(git for-each-ref --sort=-creatordate --format '%(refname)' refs/tags)"
 
     - name: print last tag
       run: |
