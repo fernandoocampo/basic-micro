@@ -27,4 +27,4 @@ jobs:
 
     - name: print last tag
       run: |
-        echo "$(git describe --tags --match="v[0-9]*" HEAD)"
+        echo "$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)"
