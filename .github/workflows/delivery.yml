@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  quality:
+  delivery:
     runs-on: [ ubuntu-latest ]
     steps:
     - name: checkout
@@ -13,7 +13,7 @@ jobs:
 
     - name: Print head git commit message
       run: |
-        echo "$(git show -s --format=%s)"
+        echo "${{github.event.head_commit.message}}"
 
     - name: Print if it is a feature
       if: ${{ contains(github.event.head_commit.message, 'feat:') }}
@@ -24,3 +24,7 @@ jobs:
       if: ${{ contains(github.event.head_commit.message, 'chore:') }}
       run: |
         echo "it was a chore"
+
+    - name: print last tag
+      run: |
+        echo "$(git describe --tags --match="v[0-9]*" HEAD)"
