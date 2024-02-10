@@ -1,0 +1,26 @@
+name: delivery
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  quality:
+    runs-on: [ ubuntu-latest ]
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: Print head git commit message
+      run: |
+        echo "$(git show -s --format=%s)"
+
+    - name: Print head git commit message
+      if: ${{ contains(github.event.head_commit.message, 'feat:') }}
+      run: |
+        echo "it was a feature"
+
+    - name: Print head git commit message
+      if: ${{ contains(github.event.head_commit.message, 'chore:') }}
+      run: |
+        echo "it was a chore"

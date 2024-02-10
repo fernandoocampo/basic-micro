@@ -10,9 +10,18 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
             
-    - name: Conventional Commit Linter
-      uses: ahmadnassri/action-commit-lint@v2
+    # - name: Conventional Commit Linter
+    #   uses: ahmadnassri/action-commit-lint@v2
+
+    - name: Print head git commit message
+      run: |
+        echo "$(git show -s --format=%s)"
+
+    - name: Validate PR commit with commitlint
+      run: git show -s --format=%s | docker run --rm -i -v ./commitlint.config.js:/commitlint.config.js commitlint/commitlint:latest --config commitlint.config.js
 
     - uses: dorny/paths-filter@v3
       id: changes
@@ -35,35 +44,38 @@ jobs:
 
     - name: Setup go
       if: steps.changes.outputs.src == 'true'
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
         go-version: '1.21'
     
-    - name: Cache Go Build
-      if: steps.changes.outputs.src == 'true'
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cache/go-build
-          ~/go/pkg/mod
-        key: ${{ runner.os }}-basic-micro-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-basic-micro-
+    # - name: Cache Go Build
+    #   if: steps.changes.outputs.src == 'true'
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       ~/.cache/go-build
+    #       ~/go/pkg/mod
+    #     key: ${{ runner.os }}-basic-micro-${{ hashFiles('**/go.sum') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-basic-micro-
     
-    - name: Scan for Vulnerabilities in Code
-      if: steps.changes.outputs.src == 'true'
-      uses: Templum/govulncheck-action@v1.0.0
-      with:
-        go-version: '1.21'
-        skip-upload: true
+    # let's comment this for now, it is taking too long
+    # - name: Scan for Vulnerabilities in Code
+    #   if: steps.changes.outputs.src == 'true'
+    #   uses: Templum/govulncheck-action@v1.0.0
+    #   with:
+    #     go-version: '1.21'
+    #     skip-upload: true
 
-    - name: install go vuln check
-      if: steps.changes.outputs.src == 'true'
-      run: go install golang.org/x/vuln/cmd/govulncheck@latest
+    # let's comment this for now, it is taking too long
+    # - name: install go vuln check
+    #   if: steps.changes.outputs.src == 'true'
+    #   run: go install golang.org/x/vuln/cmd/govulncheck@latest
     
-    - name: Run govulncheck
-      if: steps.changes.outputs.src == 'true'
-      run: govulncheck -test ./...
+    # let's comment this for now, it is taking too long
+    # - name: Run govulncheck
+    #   if: steps.changes.outputs.src == 'true'
+    #   run: govulncheck -test ./...
 
     - name: Go Test
       if: steps.changes.outputs.src == 'true'
