@@ -27,7 +27,7 @@ jobs:
 
     - name: print tags
       run: |
-        echo "$(git tag)
+        echo "$(git tag)"
 
     - name: print last tag
       run: |
