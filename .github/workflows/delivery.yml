@@ -25,6 +25,10 @@ jobs:
       run: |
         echo "it was a chore"
 
+    - name: print tags
+      run: |
+        echo "$(git tag)
+
     - name: print last tag
       run: |
         echo "$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)"
