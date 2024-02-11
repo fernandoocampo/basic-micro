@@ -20,6 +20,7 @@ jobs:
         CURRENT_MESSAGE: ${{  github.event.head_commit.message  }}
       run: |
         echo "${{github.event.head_commit.message}}"
+        echo ${CURRENT_MESSAGE%%:*}
         echo "current_action=$(echo ${CURRENT_MESSAGE%%:*})" >> "$GITHUB_OUTPUT"
 
     - name: print tags
