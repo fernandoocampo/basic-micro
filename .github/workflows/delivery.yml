@@ -48,5 +48,6 @@ jobs:
         echo "${{ steps.new-tag.outputs.new_version }}"
         git config user.name "GitHub Actions"
         git config user.email "github-actions@users.noreply.github.com"
+        git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/$GITHUB_REPOSITORY
         git tag ${{ steps.new-tag.outputs.new_version }}
         git push origin ${{ steps.new-tag.outputs.new_version }}
