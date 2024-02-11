@@ -44,10 +44,12 @@ jobs:
         echo "new_version=$(./versioning.sh)" >> "$GITHUB_OUTPUT"
 
     - name: Push Git Tag
+      env:
+        GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
       run: |
         echo "${{ steps.new-tag.outputs.new_version }}"
         git config user.name "GitHub Actions"
         git config user.email "github-actions@users.noreply.github.com"
-        git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/$GITHUB_REPOSITORY
+        git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/fernandoocampo/basic-micro
         git tag ${{ steps.new-tag.outputs.new_version }}
         git push origin ${{ steps.new-tag.outputs.new_version }}
