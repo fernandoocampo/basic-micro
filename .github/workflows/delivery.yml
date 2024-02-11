@@ -43,6 +43,11 @@ jobs:
         echo "it was a $CURRENT_ACTION"
         echo "new_version=$(./versioning.sh)" >> "$GITHUB_OUTPUT"
 
+    - name: Set token for repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      run: git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
     - name: Push Git Tag
       env:
         GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
