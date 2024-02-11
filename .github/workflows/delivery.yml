@@ -38,6 +38,10 @@ jobs:
         echo "$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)"
         echo "current_version=$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)" >> "$GITHUB_OUTPUT"
 
-    - name: print last tag
+    - name: calculate version
       run: |
+        chmod +x ./versioning.sh
         echo "current version: ${{ steps.last-tag.outputs.current_version }}"
+        ./versioning.sh ${{ steps.last-tag.outputs.current_version }} 2
+
+
