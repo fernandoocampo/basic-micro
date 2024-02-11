@@ -38,7 +38,7 @@ jobs:
       if: ${{ startsWith(github.event.head_commit.message, 'fix:') || startsWith(github.event.head_commit.message, 'feat:') }}
       env: 
         CURRENT_VERSION: ${{ steps.last-tag.outputs.current_version }}
-        CURRENT_ACTION: ${{ github.event.last-commit.current_action }}
+        CURRENT_ACTION: ${{ steps.last-commit.outputs.current_action }}
       run: |
         echo "it was a $CURRENT_ACTION"
         echo "new_version=$(./versioning.sh)" >> "$GITHUB_OUTPUT"
