@@ -18,7 +18,8 @@ jobs:
       id: last-commit
       run: |
         echo "${{github.event.head_commit.message}}"
-        echo "current_action=${${{github.event.head_commit.message}}%%:*}" >> "$GITHUB_OUTPUT"
+        message=${{github.event.head_commit.message}}
+        echo "current_action=${message%%:*}" >> "$GITHUB_OUTPUT"
 
     - name: print tags
       run: |
