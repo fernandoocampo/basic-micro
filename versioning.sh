@@ -6,7 +6,7 @@
 
 increment_version() {
   local delimiter=.
-  local version=$("$1" | tr -d v)
+  local version=$(echo "$1" | tr -d v)
   local array=($(echo "$version" | tr $delimiter '\n'))
   array[$2]=$((array[$2]+1))
   if [ $2 -lt 2 ]; then array[2]=0; fi
