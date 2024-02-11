@@ -18,16 +18,6 @@ jobs:
       run: |
         echo "${{github.event.head_commit.message}}"
 
-    - name: Print if it is a feature
-      if: ${{ contains(github.event.head_commit.message, 'feat:') }}
-      run: |
-        echo "it was a feature"
-
-    - name: Print if it is a chore
-      if: ${{ contains(github.event.head_commit.message, 'chore:') }}
-      run: |
-        echo "it was a chore"
-
     - name: print tags
       run: |
         echo "$(git for-each-ref --sort=-creatordate --format '%(refname)' refs/tags)"
@@ -38,10 +28,14 @@ jobs:
         echo "$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)"
         echo "current_version=$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)" >> "$GITHUB_OUTPUT"
 
-    - name: calculate version
+    - name: Print if it is a feature
+      if: ${{ contains(github.event.head_commit.message, 'feat:') }}
       run: |
-        chmod +x ./versioning.sh
-        echo "current version: ${{ steps.last-tag.outputs.current_version }}"
+        echo "it was a feature"
+        ./versioning.sh ${{ steps.last-tag.outputs.current_version }} 1
+
+    - name: Print if it is a fix
+      if: ${{ contains(github.event.head_commit.message, 'fix:') }}
+      run: |
+        echo "it was a feature"
         ./versioning.sh ${{ steps.last-tag.outputs.current_version }} 2
-
-
