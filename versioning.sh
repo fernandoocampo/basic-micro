@@ -14,4 +14,12 @@ increment_version() {
   echo $(local IFS=$delimiter ; echo "v${array[*]}")
 }
 
-increment_version $1 $2
+if [ "$CURRENT_ACTION" = "feat" ]; then
+    increment_version $CURRENT_VERSION 1
+    exit;
+fi
+
+if [ "$CURRENT_ACTION" = "fix" ]; then
+    increment_version $CURRENT_VERSION 2
+    exit;
+fi
