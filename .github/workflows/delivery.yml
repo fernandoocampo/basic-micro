@@ -16,10 +16,11 @@ jobs:
 
     - name: Print head git commit message
       id: last-commit
+      env:
+        CURRENT_MESSAGE: ${{  github.event.head_commit.message  }}
       run: |
         echo "${{github.event.head_commit.message}}"
-        message=${{github.event.head_commit.message}}
-        echo "current_action=${message%%:*}" >> "$GITHUB_OUTPUT"
+        echo "current_action=${CURRENT_MESSAGE%%:*}" >> "$GITHUB_OUTPUT"
 
     - name: print tags
       run: |
