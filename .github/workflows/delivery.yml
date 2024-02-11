@@ -45,8 +45,8 @@ jobs:
 
     - name: Push Git Tag
       run: |
-        echo "${{ github.event.net-tat.new_version }}"
-  #     git config user.name "GitHub Actions"
-  #     git config user.email "github-actions@users.noreply.github.com"
-  #     git tag ${{ steps.last-tag.outputs.current_version }}
-  #     git push origin $NEW_TAG
+        echo "${{ steps.new-tag.outputs.new_version }}"
+        git config user.name "GitHub Actions"
+        git config user.email "github-actions@users.noreply.github.com"
+        git tag ${{ steps.new-tag.outputs.new_version }}
+        git push origin ${{ steps.new-tag.outputs.new_version }}
