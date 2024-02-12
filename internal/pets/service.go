@@ -52,6 +52,7 @@ func NewService(settings ServiceSetup) *Service {
 
 // Create create a pet and store it in a database.
 func (s *Service) Create(ctx context.Context, newPet NewPet) (PetID, error) {
+	s.logger.Info("starting to create a new pet")
 	pet := buildNewPet(newPet)
 
 	err := s.storer.Save(ctx, pet)
