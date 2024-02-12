@@ -21,8 +21,9 @@ jobs:
         CURRENT_MESSAGE: ${{  github.event.head_commit.message  }}
       run: |
         echo "${{github.event.head_commit.message}}"
-        echo ${CURRENT_MESSAGE%%:*}
-        echo "current_action=${CURRENT_MESSAGE%%:*}" >> "$GITHUB_OUTPUT"
+        real_message=$(echo "$CURRENT_MESSAGE" | grep -E "^feat:|fix:")
+        echo ${real_message%%:*}
+        echo "current_action=${real_message%%:*}" >> "$GITHUB_OUTPUT"
 
     - name: print tags
       run: |
