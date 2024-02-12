@@ -21,7 +21,7 @@ func main() {
 		os.Exit(-1)
 	}
 
-	log.Println("terminated")
+	log.Println("finishin application")
 }
 
 func newApplicationServer() *application.Server {
