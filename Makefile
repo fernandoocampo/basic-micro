@@ -10,7 +10,8 @@ BUILD_DATE?=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 VERSION?=$(shell git describe --dirty --tags --always)
 LDFLAGS?="-X main.Version=${VERSION} -X main.CommitHash=${COMMIT_HASH} -X main.BuildDate=${BUILD_DATE} -s -w"
 
-clean: 
+.PHONY: clean
+clean:  ## clean binaries
 	$(GOCLEAN)
 	rm bin/$(BINARY_DARWIN)
 	rm bin/$(BINARY_UNIX)
