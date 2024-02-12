@@ -14,6 +14,8 @@ var (
 )
 
 func main() {
+	log.Println("starting application")
+
 	app := newApplicationServer()
 
 	if err := app.Run(); err != nil {
@@ -21,7 +23,7 @@ func main() {
 		os.Exit(-1)
 	}
 
-	log.Println("finishin application")
+	log.Println("finishing application")
 }
 
 func newApplicationServer() *application.Server {
