@@ -45,6 +45,7 @@ jobs:
         echo "new_version=$(./versioning.sh)" >> "$GITHUB_OUTPUT"
 
     - name: Push Git Tag
+      if: ${{ startsWith(steps.last-commit.outputs.current_action, 'fix') || startsWith(steps.last-commit.outputs.current_action, 'feat') }}
       env:
         GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
       run: |
