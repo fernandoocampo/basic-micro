@@ -43,7 +43,8 @@ jobs:
         CURRENT_ACTION: ${{ steps.last-commit.outputs.current_action }}
       run: |
         echo "it was a $CURRENT_ACTION"
-        echo "new_version=$(./versioning.sh)" >> "$GITHUB_OUTPUT"
+        chmod +x ./.github/scripts/versioning.sh
+        echo "new_version=$(./.github/scripts/versioning.sh)" >> "$GITHUB_OUTPUT"
 
     - name: Push Git Tag
       if: ${{ startsWith(steps.last-commit.outputs.current_action, 'fix') || startsWith(steps.last-commit.outputs.current_action, 'feat') }}

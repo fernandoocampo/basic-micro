@@ -21,7 +21,7 @@ jobs:
         echo "$(git show -s --format=%s)"
 
     - name: Validate PR commit with commitlint
-      run: git show -s --format=%s | docker run --rm -i -v ./commitlint.config.js:/commitlint.config.js commitlint/commitlint:latest --config commitlint.config.js
+      run: git show -s --format=%s | docker run --rm -i -v ./.github/config/commitlint.config.js:/commitlint.config.js commitlint/commitlint:latest --config commitlint.config.js
 
     - uses: dorny/paths-filter@v3
       id: changes
