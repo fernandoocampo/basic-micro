@@ -13,6 +13,7 @@ jobs:
       with:
         fetch-depth: 0
         fetch-tags: 'true'
+        token: ${{ secrets.GIT_TOKEN }}
 
     - name: Print head git commit message
       id: last-commit
@@ -43,11 +44,6 @@ jobs:
         echo "it was a $CURRENT_ACTION"
         echo "new_version=$(./versioning.sh)" >> "$GITHUB_OUTPUT"
 
-    - name: Set token for repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-      run: git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
     - name: Push Git Tag
       env:
         GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
@@ -55,6 +51,6 @@ jobs:
         echo "${{ steps.new-tag.outputs.new_version }}"
         git config user.name "GitHub Actions"
         git config user.email "github-actions@users.noreply.github.com"
-        git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/fernandoocampo/basic-micro
+        git config --global url."https://${GIT_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
         git tag ${{ steps.new-tag.outputs.new_version }}
         git push origin ${{ steps.new-tag.outputs.new_version }}
