@@ -35,9 +35,9 @@ jobs:
         echo "$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)"
         echo "current_version=$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)" >> "$GITHUB_OUTPUT"
 
-    - name: Tag features and fixes
+    - name: Calculating version
       id: new-tag
-      if: ${{ startsWith(github.event.head_commit.message, 'fix:') || startsWith(github.event.head_commit.message, 'feat:') }}
+      if: ${{ startsWith(steps.last-commit.outputs.current_action, 'fix') || startsWith(steps.last-commit.outputs.current_action, 'feat') }}
       env: 
         CURRENT_VERSION: ${{ steps.last-tag.outputs.current_version }}
         CURRENT_ACTION: ${{ steps.last-commit.outputs.current_action }}
