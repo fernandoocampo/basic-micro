@@ -1,0 +1,33 @@
+name: deployment
+
+on:
+  # to be triggered manually.
+  workflow_dispatch:
+    inputs:
+      TARGET:
+        description: 'target environment development or production'
+        required: true
+        type: string
+      VERSION:
+        description: 'project version to deploy'
+        required: true
+        type: string
+  # to be called by another workflow.
+  workflow_call:
+    inputs:
+      TARGET:
+        required: true
+        type: string
+      VERSION:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.DEPLOY_ENV }}
+    steps:
+      - name: checking environment
+        run: |
+          echo "deploying ${{ inputs.VERSION }} on ${{ inputs.DEPLOY_ENV }}"

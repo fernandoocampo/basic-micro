@@ -65,3 +65,22 @@ jobs:
         git config --global url."https://${GIT_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
         git tag ${{ steps.new-tag.outputs.new_version }}
         git push origin ${{ steps.new-tag.outputs.new_version }}
+  
+    outputs:
+      VERSION: ${{ steps.new-tag.outputs.new_version }}
+
+  dev_deployment:
+      name: Deploy on development
+      needs: delivery
+      uses: fernandoocampo/basic-micro/.github/workflows/deployment.yml@main
+      with:
+        TARGET: development
+        VERSION: ${{ needs.delivery.outputs.VERSION }}
+
+  prod_deployment:
+      name: Deploy on production
+      needs: delivery
+      uses: fernandoocampo/basic-micro/.github/workflows/deployment.yml@main
+      with:
+        TARGET: production
+        VERSION: ${{ needs.delivery.outputs.VERSION
