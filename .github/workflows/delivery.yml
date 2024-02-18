@@ -83,4 +83,4 @@ jobs:
       uses: fernandoocampo/basic-micro/.github/workflows/deployment.yml@main
       with:
         TARGET: production
-        VERSION: ${{ needs.delivery.outputs.VERSION
+        VERSION: ${{ needs.delivery.outputs.VERSION }}
