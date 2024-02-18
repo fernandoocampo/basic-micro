@@ -26,8 +26,8 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
-    environment: ${{ inputs.DEPLOY_ENV }}
+    environment: ${{ inputs.TARGET }}
     steps:
       - name: checking environment
         run: |
-          echo "deploying ${{ inputs.VERSION }} on ${{ inputs.DEPLOY_ENV }}"
+          echo "deploying ${{ inputs.VERSION }} on ${{ inputs.TARGET }}"

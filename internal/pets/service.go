@@ -72,7 +72,7 @@ func (s *Service) Create(ctx context.Context, newPet NewPet) (PetID, error) {
 
 // Update update a pet in a database.
 func (s *Service) Update(ctx context.Context, pet UpdatePet) error {
-	s.logger.Debug("starting to update pet")
+	s.logger.Debug("starting update for pet")
 	err := validPetToUpdate(pet)
 	if err != nil {
 		return fmt.Errorf("unable to update pet: %w", err)
