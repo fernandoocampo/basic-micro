@@ -89,7 +89,7 @@ func (s *Service) Update(ctx context.Context, pet UpdatePet) error {
 }
 
 func (s *Service) QueryByID(ctx context.Context, id PetID) (*Pet, error) {
-	s.logger.Debug("starting to query pet by id")
+	s.logger.Debug("starting query pet by id")
 	if id == EmptyPetID {
 		return nil, errEmptyPetID
 	}
