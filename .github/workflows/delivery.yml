@@ -63,11 +63,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
       run: |
-        npx semantic-release --dry-run --no-ci
+        echo "new_version=$(npx semantic-release --dry-run --no-ci | grep 'The next release version is' | sed -E 's/.* ([[:digit:].]+)$/\1/')" >> "$GITHUB_OUTPUT"
 
     - name: Print New Version
       run: |
-        echo "${{ steps.get-next-version.outputs.new-release-version }}"
+        echo "${{ steps.get-next-version.outputs.new_version }}"
   
     - name: Release
       env:
