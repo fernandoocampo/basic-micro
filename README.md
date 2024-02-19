@@ -24,7 +24,7 @@ make build-linux
 docker-compose up --build
 ```
 
-or run this shortcut
+or run this shortcut:
 
 ```sh
 make run-local
