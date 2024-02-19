@@ -7,6 +7,10 @@ on:
 jobs:
   delivery:
     runs-on: [ ubuntu-latest ]
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
     steps:
     - name: checkout
       uses: actions/checkout@v4
@@ -14,6 +18,17 @@ jobs:
         fetch-depth: 0
         fetch-tags: 'true'
         token: ${{ secrets.GIT_TOKEN }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: "lts/*"
+
+    - name: Install dependencies
+      run: npm clean-install
+
+    - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+      run: npm audit signatures
 
     - name: Print head git commit message
       id: last-commit
@@ -43,31 +58,13 @@ jobs:
         echo "$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)"
         echo "current_version=$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)" >> "$GITHUB_OUTPUT"
 
-    - name: Calculating version
-      id: new-tag
-      if: ${{ steps.new-delivery.outputs.ok == 'true' }}
-      env: 
-        CURRENT_VERSION: ${{ steps.last-tag.outputs.current_version }}
-        CURRENT_ACTION: ${{ steps.last-commit.outputs.current_action }}
-      run: |
-        echo "it was a $CURRENT_ACTION"
-        chmod +x ./.github/scripts/versioning.sh
-        echo "new_version=$(./.github/scripts/versioning.sh)" >> "$GITHUB_OUTPUT"
-
-    - name: Push Git Tag
-      if: ${{ steps.new-delivery.outputs.ok == 'true' }}
+    - name: Release
       env:
-        GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-      run: |
-        echo "${{ steps.new-tag.outputs.new_version }}"
-        git config user.name "GitHub Actions"
-        git config user.email "github-actions@users.noreply.github.com"
-        git config --global url."https://${GIT_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-        git tag ${{ steps.new-tag.outputs.new_version }}
-        git push origin ${{ steps.new-tag.outputs.new_version }}
+        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      run: npx semantic-release
   
     outputs:
-      VERSION: ${{ steps.new-tag.outputs.new_version }}
+      VERSION: 'v0.1.0'
 
   dev_deployment:
       name: Deploy on development
