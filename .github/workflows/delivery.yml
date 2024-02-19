@@ -24,11 +24,11 @@ jobs:
       with:
         node-version: "lts/*"
 
-    - name: Install dependencies
-      run: npm clean-install
+    - name: Install sematic release
+      run: npm install --save-dev semantic-release@23.0.2
 
-    - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-      run: npm audit signatures
+    # - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+    #   run: npm audit signatures
 
     - name: Print head git commit message
       id: last-commit

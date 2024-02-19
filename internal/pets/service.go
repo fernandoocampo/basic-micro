@@ -104,7 +104,7 @@ func (s *Service) QueryByID(ctx context.Context, id PetID) (*Pet, error) {
 		return nil, errQueryPet
 	}
 
-	s.logger.Debug("pet was found", slog.Any("pet", pet))
+	s.logger.Debug("a pet was found", slog.Any("pet", pet))
 
 	return pet, nil
 }
