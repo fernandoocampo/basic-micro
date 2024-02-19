@@ -58,6 +58,17 @@ jobs:
         echo "$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)"
         echo "current_version=$(git describe --tags --abbrev=0 --match="v[0-9].[0-9].[0-9]*" HEAD)" >> "$GITHUB_OUTPUT"
 
+    - name: Release Dry Run
+      id: get-next-version
+      env:
+        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      run: |
+        npx semantic-release --dry-run --no-ci
+
+    - name: Print New Version
+      run: |
+        echo "${{ steps.get-next-version.outputs.new-release-version }}"
+  
     - name: Release
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
