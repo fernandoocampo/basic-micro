@@ -3,6 +3,12 @@
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
+      [
+        "@semantic-release/exec",
+        {
+          "verifyReleaseCmd": "echo \"NEXT_RELEASE_VERSION=${nextRelease.version}\""
+        }
+      ],
       {
         "preset": "angular",
         "releaseRules": [
