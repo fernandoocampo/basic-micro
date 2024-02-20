@@ -11,7 +11,7 @@ from project folder run below commands, it will output binaries in `./bin/` fold
 make build
 ```
 
-* build for a linux distro operating system
+* build for a linux distro operating system.
 ```sh
 make build-linux
 ```
