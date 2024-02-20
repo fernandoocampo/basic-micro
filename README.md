@@ -6,7 +6,7 @@ This is a service that provides an API for pets administration.
 
 from project folder run below commands, it will output binaries in `./bin/` folder
 
-* just build with current operating system
+* just build with current operating system.
 ```sh
 make build
 ```
