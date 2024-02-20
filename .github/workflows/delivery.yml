@@ -19,6 +19,9 @@ jobs:
         fetch-tags: 'true'
         token: ${{ secrets.GIT_TOKEN }}
 
+    - name: Check commit with commitlint
+      run: git show -s --format=%s | docker run --rm -i -v ./.github/config/commitlint.config.js:/commitlint.config.js commitlint/commitlint:latest --config commitlint.config.js
+
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
