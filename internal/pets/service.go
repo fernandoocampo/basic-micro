@@ -111,6 +111,7 @@ func (s *Service) QueryByID(ctx context.Context, id PetID) (*Pet, error) {
 
 // Delete detele a pet from database.
 func (s *Service) Delete(ctx context.Context, id PetID) error {
+	s.logger.Debug("starting delete pet")
 	pet, err := s.QueryByID(ctx, id)
 	if err != nil {
 		return errDeletePet
