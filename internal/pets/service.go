@@ -139,6 +139,7 @@ func (s *Service) Delete(ctx context.Context, id PetID) error {
 }
 
 func (s *Service) Query(ctx context.Context, filter QueryFilter) (SearchPetsResult, error) {
+	s.logger.Debug("starting query pet")
 	if filter.isInvalid() {
 		return SearchPetsResult{}, nil
 	}
