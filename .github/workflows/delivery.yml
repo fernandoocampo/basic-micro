@@ -33,6 +33,9 @@ jobs:
     - name: Install semantic release changelog
       run: npm install @semantic-release/changelog@6.0.3 -D
 
+    - name: Install semantic release git
+      run: npm install @semantic-release/git@10.0.1 -D
+
     # - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
     #   run: npm audit signatures
 
@@ -75,6 +78,11 @@ jobs:
       if: ${{ steps.get-next-version.outputs.new_version != '' }}
       run: |
         echo "${{ steps.get-next-version.outputs.new_version }}"
+    
+    - name: Change version in Makefile
+      if: ${{ steps.get-next-version.outputs.new_version != '' }}
+      run: |
+        sed -i '' 's/.*APP_VERSION?=.*/APP_VERSION?='"$NEW_VERSION"'/' Makefile
   
     - name: Release
       if: ${{ steps.get-next-version.outputs.new_version != '' }}
@@ -83,7 +91,7 @@ jobs:
       run: npx semantic-release
   
     outputs:
-      VERSION: 'v0.1.0'
+      VERSION: ${{ steps.get-next-version.outputs.new_version }}
 
   dev_deployment:
       name: Deploy on development

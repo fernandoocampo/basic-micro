@@ -1,3 +1,5 @@
+APP_VERSION?=0.1.0
+IMAGE?=pets:$(APP_VERSION)
 GOCMD=go
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
@@ -41,3 +43,7 @@ clean-local: ## clean docker-compsoe
 .PHONY: test
 test: ## run unit tests
 	${GOCMD} test -race ./...
+
+.PHONY: print-image-name
+print-image-name: ## print current app version
+	echo ${IMAGE}
