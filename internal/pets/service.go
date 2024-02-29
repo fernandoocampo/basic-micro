@@ -42,6 +42,8 @@ var (
 
 // NewService create a new pets service.
 func NewService(settings ServiceSetup) *Service {
+	settings.Logger.Debug("creating new pet service")
+
 	newService := Service{
 		logger: settings.Logger,
 		storer: settings.Storer,
