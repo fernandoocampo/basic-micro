@@ -66,5 +66,7 @@ func (s *Store) QueryByID(ctx context.Context, id pets.PetID) (*pets.Pet, error)
 		Name: "Drila",
 	}
 
+	s.logger.Info("a pet was found", slog.Any("pet", pet))
+
 	return &pet, nil
 }

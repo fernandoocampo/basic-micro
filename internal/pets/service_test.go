@@ -293,9 +293,8 @@ func TestQuery(t *testing.T) {
 
 type storerMock struct {
 	pets.Storer
-	err        error
-	ids        []pets.PetID
-	deletedIDs []pets.PetID
+	err error
+	ids []pets.PetID
 
 	updatedPet pets.UpdatePet
 	deletedPet pets.Pet
