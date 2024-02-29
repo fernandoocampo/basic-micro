@@ -72,7 +72,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
       run: |
-        echo "new_version=v$(npx semantic-release --dry-run --no-ci | grep 'The next release version is' | sed -E 's/.* ([[:digit:].]+)$/\1/')" >> "$GITHUB_OUTPUT"
+        echo "new_version=$(npx semantic-release --dry-run --no-ci | grep 'The next release version is' | sed -E 's/.* ([[:digit:].]+)$/\1/')" >> "$GITHUB_OUTPUT"
 
     - name: Print New Version
       if: ${{ steps.get-next-version.outputs.new_version != '' }}
@@ -82,7 +82,7 @@ jobs:
     - name: Change version in Makefile
       if: ${{ steps.get-next-version.outputs.new_version != '' }}
       run: |
-        sed -i '' 's/.*APP_VERSION?=.*/APP_VERSION?=${{ steps.get-next-version.outputs.new_version }}/' Makefile
+        sed -i 's/.*APP_VERSION?=.*/APP_VERSION?=${{ steps.get-next-version.outputs.new_version }}/' Makefile
   
     - name: Release
       if: ${{ steps.get-next-version.outputs.new_version != '' }}
