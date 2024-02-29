@@ -82,7 +82,7 @@ jobs:
     - name: Change version in Makefile
       if: ${{ steps.get-next-version.outputs.new_version != '' }}
       run: |
-        sed -i '' 's/.*APP_VERSION?=.*/APP_VERSION?='"$NEW_VERSION"'/' Makefile
+        sed -i '' 's/.*APP_VERSION?=.*/APP_VERSION?=${{ steps.get-next-version.outputs.new_version }}/' Makefile
   
     - name: Release
       if: ${{ steps.get-next-version.outputs.new_version != '' }}
