@@ -3,6 +3,10 @@ name: delivery
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'
+      - 'CODEOWNERS'
+      - 'CHANGELOG.md'
 
 jobs:
   delivery:
