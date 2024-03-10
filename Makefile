@@ -10,7 +10,7 @@ BINARY_DARWIN=$(BINARY_NAME)-amd64-darwin
 COMMIT_HASH?=$(shell git rev-parse HEAD)
 BUILD_DATE?=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 VERSION?=$(shell git describe --dirty --tags --always)
-LDFLAGS?="-X main.Version=${VERSION} -X main.CommitHash=${COMMIT_HASH} -X main.BuildDate=${BUILD_DATE} -s -w"
+LDFLAGS?="-X github.com/fernandoocampo/basic-micro/internal/service.Version=${VERSION} -X github.com/fernandoocampo/basic-micro/internal/service.CommitHash=${COMMIT_HASH} -X github.com/fernandoocampo/basic-micro/internal/service.BuildDate=${BUILD_DATE} -s -w"
 
 .PHONY: clean
 clean:  ## clean binaries
@@ -28,15 +28,15 @@ build-linux: ## Build binary for Linux
 	@mkdir -p bin
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 ${GOBUILD} -ldflags ${LDFLAGS} -o bin/${BINARY_UNIX} ./${SRC_FOLDER}/main.go
 
-.PHONY: run-app
-run-app: ## run app
-	go run cmd/petsd/main.go
-
 .PHONY: run-local
+run-app: ## run app
+	go run -ldflags ${LDFLAGS} cmd/petsd/main.go
+
+.PHONY: run-docker-local
 run-local: ## run project local
 	docker-compose up --build
 
-.PHONY: clean-local
+.PHONY: clean-docker-local
 clean-local: ## clean docker-compsoe
 	docker-compose down
 

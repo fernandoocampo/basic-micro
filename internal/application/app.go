@@ -44,14 +44,20 @@ type Server struct {
 const ServiceName = "basic-micro"
 
 var (
+	Version    string
+	BuildDate  string
+	CommitHash string
+)
+
+var (
 	errStartingApplication = errors.New("unable to start application")
 )
 
-func NewServer(settings Setup) *Server {
+func New() *Server {
 	newServer := Server{
-		version:    settings.Version,
-		buildDate:  settings.BuildDate,
-		commitHash: settings.CommitHash,
+		version:    Version,
+		buildDate:  BuildDate,
+		commitHash: CommitHash,
 	}
 
 	return &newServer
