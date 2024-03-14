@@ -29,15 +29,15 @@ build-linux: ## Build binary for Linux
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 ${GOBUILD} -ldflags ${LDFLAGS} -o bin/${BINARY_UNIX} ./${SRC_FOLDER}/main.go
 
 .PHONY: run-local
-run-app: ## run app
+run-local: ## run local
 	go run -ldflags ${LDFLAGS} cmd/petsd/main.go
 
 .PHONY: run-docker-local
-run-local: ## run project local
+run-docker-local: ## run project local
 	docker-compose up --build
 
 .PHONY: clean-docker-local
-clean-local: ## clean docker-compsoe
+clean-docker-local: ## clean docker-compsoe
 	docker-compose down
 
 .PHONY: test

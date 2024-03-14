@@ -1,5 +1,5 @@
 # Builder image go
-FROM golang:1.21.7 AS builder
+FROM golang:1.22.1 AS builder
 
 ARG appVersion
 ARG commitHash

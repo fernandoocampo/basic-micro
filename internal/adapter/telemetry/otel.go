@@ -68,15 +68,15 @@ func NewOtelSDK(ctx context.Context, otelSetup OtelSDKSetup) (shutdown ShutdownF
 	otel.SetTracerProvider(tracerProvider)
 
 	// Set up meter provider.
-	logger.Info("setting up meter provider")
-	meterProvider, err := newMeterProvider(res)
-	if err != nil {
-		logger.Error("creating new meter provider", "error", err)
-		shutdown(ctx)
-		return
-	}
-	shutdownFuncs = append(shutdownFuncs, meterProvider.Shutdown)
-	otel.SetMeterProvider(meterProvider)
+	// logger.Info("setting up meter provider")
+	// meterProvider, err := newMeterProvider(res)
+	// if err != nil {
+	// 	logger.Error("creating new meter provider", "error", err)
+	// 	shutdown(ctx)
+	// 	return
+	// }
+	// shutdownFuncs = append(shutdownFuncs, meterProvider.Shutdown)
+	// otel.SetMeterProvider(meterProvider)
 
 	return
 }

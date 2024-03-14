@@ -1,6 +1,6 @@
 module github.com/fernandoocampo/basic-micro
 
-go 1.21
+go 1.22.1
 
 require (
 	github.com/caarlos0/env v3.5.0+incompatible

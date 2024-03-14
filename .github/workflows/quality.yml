@@ -46,7 +46,7 @@ jobs:
       if: steps.changes.outputs.src == 'true'
       uses: actions/setup-go@v5
       with:
-        go-version: '1.21'
+        go-version: '1.22'
     
     # - name: Cache Go Build
     #   if: steps.changes.outputs.src == 'true'
