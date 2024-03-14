@@ -44,6 +44,10 @@ clean-docker-local: ## clean docker-compsoe
 test: ## run unit tests
 	${GOCMD} test -race ./...
 
+.PHONY: vet
+vet: ## run unit tests
+	${GOCMD} vet ./...
+
 .PHONY: print-image-name
 print-image-name: ## print current app version
 	echo ${IMAGE}
