@@ -24,7 +24,7 @@
     ],
     [
       "@semantic-release/git", {
-        "assets": ["CHANGELOG", "Makefile"]
+        "assets": ["CHANGELOG.md", "Makefile"]
       }
     ]
   ]
