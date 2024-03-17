@@ -23,13 +23,24 @@ jobs:
         fetch-tags: 'true'
         token: ${{ secrets.GIT_TOKEN }}
 
-    - name: Check commit with commitlint
-      run: git show -s --format=%s | docker run --rm -i -v ./.github/config/commitlint.config.js:/commitlint.config.js commitlint/commitlint:latest --config commitlint.config.js
-
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: "v21.6.2"
+
+    - name: Install commitlint
+      run: |
+        npm install conventional-changelog-conventionalcommits
+        npm install commitlint@latest
+        npm install --save-dev @commitlint/config-conventional
+
+    - name: Validate PR commit with commitlint
+      run: |
+        last_commit=$(echo $(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%h" | tail -n 1))
+        npx commitlint --from ${last_commit} --config .github/config/commitlint.config.js
+
+    # - name: Check commit with commitlint
+    #   run: git show -s --format=%s | docker run --rm -i -v ./.github/config/commitlint.config.js:/commitlint.config.js commitlint/commitlint:latest --config commitlint.config.js
 
     - name: Install semantic release
       run: npm install --save-dev semantic-release@23.0.2
