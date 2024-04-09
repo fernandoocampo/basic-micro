@@ -1,3 +1,10 @@
+## [0.7.3](https://github.com/fernandoocampo/basic-micro/compare/v0.7.2...v0.7.3) (2024-4-9)
+
+
+### Bug Fixes
+
+* add log to finish message ([086fda8](https://github.com/fernandoocampo/basic-micro/commit/086fda8d6e82f3435308db28aa39147977cff009))
+
 ## [0.7.2](https://github.com/fernandoocampo/basic-micro/compare/v0.7.1...v0.7.2) (2024-3-14)
 
 
