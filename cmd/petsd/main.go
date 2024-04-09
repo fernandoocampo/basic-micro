@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/fernandoocampo/basic-micro/internal/application"
 )
@@ -15,5 +16,5 @@ func main() {
 		os.Exit(-1)
 	}
 
-	log.Println("finishing application")
+	log.Println("finishing application", time.Now())
 }
